@@ -24,7 +24,9 @@ from telegram.ext import (Updater, CommandHandler, MessageHandler,
                           ChatMemberHandler)
 
 # ===== CONFIG =====
-BOT_TOKEN = os.environ.get('BOT_TOKEN') or "8501850469:AAFHQEmD6WTakgGGMl2WLVrBStUcwD7Ztgs"
+BOT_TOKEN = os.environ.get('BOT_TOKEN')
+if not BOT_TOKEN:
+    raise ValueError("BOT_TOKEN environment variable not set")
 # Staff admin IDs (bot staff), edit as needed
 STAFF_ADMINS = [8030914400, 7235105154, 5116732881]
 # Points: win = 5 points; 1 point = 20 QuackPoints (conversion)
@@ -360,7 +362,7 @@ def indizio(update: Update, context: CallbackContext):
         update.message.reply_text('Indizio inviato al gruppo.')
         log_event('indizio_sent', desc, {'game_id': gid, 'by': user.id})
     except Exception as e:
-        update.message.reply_text('Errore nell'inviare l\'indizio.')
+        update.message.reply_text("Errore nell'inviare l'indizio.")
         log_event('error', 'indizio send failed', {'exception': str(e)})
 
 # Detect guesses in group
